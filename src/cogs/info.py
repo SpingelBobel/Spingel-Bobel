@@ -53,7 +53,7 @@ class Info(commands.Cog):
             value=f"{int(time_days[0]):,}d, {int(time_hours[0]):,}h, {int(time_minutes[0]):,}m, and {int(time_seconds[0]):,}s"
         ).add_field(
             name="ALOC", inline=True,
-            value=f"{1746:,} lines"
+            value=f"{556:,} lines"
         ).add_field(
             name="Guilds", inline=True,
             value=f"{total_guilds:,} servers"
