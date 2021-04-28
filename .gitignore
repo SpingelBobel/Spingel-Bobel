@@ -5,6 +5,9 @@
 # Ignore creds file
 config/creds.json
 
+# Ignore log files
+logs/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
