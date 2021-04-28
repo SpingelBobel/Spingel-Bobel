@@ -113,7 +113,8 @@ class Question(commands.Cog):
 
                 # check if the message was deleted while we were processing, perhaps it was automodded out
                 try:
-                    _ = await self.bot.fetch_message(message.id)
+                    _ = await message.channel.fetch_message(message.id)
+                    assert _ is not None
                     await message.channel.send(file=discord.File(b, "conch.gif"))
                 except:
                     # The message was deleted, do not send the content
