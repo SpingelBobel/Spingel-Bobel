@@ -4,6 +4,7 @@
 
 # Ignore creds file
 config/creds.json
+config/questions.txt
 
 # Ignore log files
 logs/
