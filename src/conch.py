@@ -47,9 +47,10 @@ async def on_error(event_method, *_, **__):
 
 @conch_bot.event
 async def on_command_error(context, exception):
-    for _class in [commands.CommandNotFound, commands.CheckFailure]:
-        if isinstance(exception, _class):
-            return
+    ignored = (commands.CommandNotFound, commands.CheckFailure)
+    if isinstance(exception, ignored):
+        return
+    
     exc = traceback.format_exception(exception.__class__, exception, exception.__traceback__)
     exc = ''.join(exc) if isinstance(exc, list) else exc
     logger.error(f'Ignoring exception in command {context.command}:\n{exc}')
