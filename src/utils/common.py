@@ -11,6 +11,12 @@ def load_creds(is_debug, bot: str):
         return creds[bot + "BETA_TOKEN"] if is_debug else creds[bot + "TOKEN"]
 
 
+def load_references() -> dict:
+    with open('config/references.json') as fp:
+        refs = json.load(fp)
+    return refs
+
+
 def tail(f, lines):
     tail_log = []
     at_idx = 0

@@ -10,3 +10,7 @@ In any channel this bot has read and send message permissions, mentioning the bo
 The general layout is as follows: `@Magic Conch#7782 [question]?`
 
 For example, `@Magic Conch#7782 can I have something to eat?` will have the bot create a .GIF response sent in the channel which it received the question [like so](https://media.discordapp.net/attachments/476812281984974870/709633975932682351/out.gif)
+
+# Privacy Statement
+
+Information about what this bot logs and how the data is used can be [found here](https://github.com/dovedevic/magicconch/blob/main/PRIVACY.md).

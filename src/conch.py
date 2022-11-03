@@ -5,7 +5,8 @@ import traceback
 import discord
 from discord.ext import commands
 
-from src.manager import Manager
+from manager import Manager
+from utils.common import load_references
 
 
 async def prefix(_bot, message):
@@ -19,7 +20,7 @@ conch_bot = commands.AutoShardedBot(
     intents=discord.Intents.default()
 )
 conch_bot.remove_command('help')
-version = "v4.0.1r"
+version = "v5.0.0r"
 STARTED = False
 
 
@@ -32,7 +33,11 @@ async def on_ready():
         conch_bot.started = datetime.datetime.now()
         conch_bot.version = version
         conch_bot.total_questions = 0
-        conch_bot.add_cog(Manager(conch_bot))
+
+        await conch_bot.add_cog(Manager(conch_bot, "magicconch"))
+        loaded, total = await conch_bot.get_cog("Manager").load_all_cogs()
+        await conch_bot.get_channel(load_references()['admin_channel']).send(f"Magic Conch is online.\nLoaded {loaded} of {total} cogs.")
+
         STARTED = True
 
 
@@ -47,9 +52,10 @@ async def on_error(event_method, *_, **__):
 
 @conch_bot.event
 async def on_command_error(context, exception):
-    for _class in [commands.CommandNotFound, commands.CheckFailure]:
-        if isinstance(exception, _class):
-            return
+    ignored = (commands.CommandNotFound, commands.CheckFailure)
+    if isinstance(exception, ignored):
+        return
+    
     exc = traceback.format_exception(exception.__class__, exception, exception.__traceback__)
     exc = ''.join(exc) if isinstance(exc, list) else exc
     logger.error(f'Ignoring exception in command {context.command}:\n{exc}')
