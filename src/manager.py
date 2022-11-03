@@ -5,8 +5,8 @@ import traceback
 
 from discord.ext import commands
 
-from utils.async_base_cog import AsyncBaseCog
-from utils import checks
+from src.utils.async_base_cog import AsyncBaseCog
+from src.utils import checks
 
 
 class Manager(AsyncBaseCog, name="Manager"):

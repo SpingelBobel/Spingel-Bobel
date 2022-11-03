@@ -7,7 +7,7 @@ import discord
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageSequence, ImageFont
 
-from utils.async_base_cog import AsyncBaseCog
+from src.utils.async_base_cog import AsyncBaseCog
 
 
 class Question(AsyncBaseCog):

@@ -5,8 +5,8 @@ import traceback
 import discord
 from discord.ext import commands
 
-from manager import Manager
-from utils.common import load_references
+from src.manager import Manager
+from src.utils.common import load_references
 
 
 async def prefix(_bot, message):
