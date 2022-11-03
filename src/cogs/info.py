@@ -1,15 +1,12 @@
-import logging
 import datetime
 import discord
 
 from discord.ext import commands
 
+from utils.async_base_cog import AsyncBaseCog
 
-class Info(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.logger.info("Loaded Info Cog")
+
+class Info(AsyncBaseCog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -37,16 +34,20 @@ class Info(commands.Cog):
                 f"**Commands and Usage**\n"
                 f"<@{self.bot.user.id}> help, info, stat, stats, or invite: *this menu*\n"
                 f"<@{self.bot.user.id}> [question]? : *asks the bot a question and requests a .GIF response*\n"
-                f"\n**Invite Link**\n"
-                f"[Click here](https://discord.com/oauth2/authorize?client_id=481916394410344450&scope=bot)\n"
                 f"\nThe following are my current session metrics and statistics!\n",
                 color=self.bot.user.color
         ).set_thumbnail(
-            url=self.bot.user.avatar_url
+            url=self.bot.user.avatar.url
         ).set_footer(
             text=f"Requestor: {user.id}"
         ).add_field(
-            name="Version", inline=True,
+            name="Invite Link", inline=True,
+            value="[Clicky](https://discord.com/oauth2/authorize?client_id=481916394410344450&scope=bot)"
+        ).add_field(
+            name="Support Server", inline=True,
+            value="[Bikini Bottom](https://discord.gg/spongebob)"
+        ).add_field(
+            name="Version", inline=False,
             value=self.bot.version
         ).add_field(
             name="Uptime", inline=True,
@@ -67,5 +68,5 @@ class Info(commands.Cog):
         await channel.send(embed=embed)
 
 
-def setup(bot):
-    bot.add_cog(Info(bot))
+async def setup(bot):
+    await bot.add_cog(Info(bot))

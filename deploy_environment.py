@@ -1,7 +1,7 @@
 import asyncio
 import sys
 
-from src.utils import logging
+from src.utils import logger
 from src.utils import common
 from src import conch as conch_bot
 

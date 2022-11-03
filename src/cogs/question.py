@@ -1,18 +1,19 @@
+import asyncio
 import re
 import io
 import random
-import logging
 import discord
 
 from discord.ext import commands
 from PIL import Image, ImageDraw, ImageSequence, ImageFont
 
+from utils.async_base_cog import AsyncBaseCog
 
-class Question(commands.Cog):
+
+class Question(AsyncBaseCog):
     def __init__(self, bot):
-        self.bot = bot
-        self.logger = logging.getLogger(self.__class__.__name__)
-        self.logger.info("Loaded Question Cog")
+        super().__init__(bot)
+
         self.responses = [
             'Yes',
             'Yes',
@@ -113,6 +114,7 @@ class Question(commands.Cog):
 
                 # check if the message was deleted while we were processing, perhaps it was automodded out
                 try:
+                    await asyncio.sleep(0.5)
                     _ = await message.channel.fetch_message(message.id)
                     assert _ is not None
                     await message.channel.send(file=discord.File(b, "conch.gif"))
@@ -211,5 +213,5 @@ class Question(commands.Cog):
         return pattern.sub(repl2, result)
 
 
-def setup(bot):
-    bot.add_cog(Question(bot))
+async def setup(bot):
+    await bot.add_cog(Question(bot))
