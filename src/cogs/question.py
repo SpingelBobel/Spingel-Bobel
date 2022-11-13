@@ -110,7 +110,6 @@ class Question(AsyncBaseCog):
         await interaction.followup.send(file=conch_response_file)
 
     async def do_conch(self, author: discord.User, guild: discord.Guild, question: str) -> discord.File:
-        self.logger.info(f"{guild.id if guild else 'DM'}:{author.id} asked the conch {question}")
         self.update_questions()
 
         # Get the response
@@ -154,6 +153,8 @@ class Question(AsyncBaseCog):
         b = io.BytesIO()
         frames[0].save(b, save_all=True, append_images=frames[1:], format='GIF')
         b.seek(0)
+
+        self.logger.info(f"{guild.id if guild else 'DM'} : {author.id} : {question} : {resp}")
 
         return discord.File(b, "conch.gif")
 
