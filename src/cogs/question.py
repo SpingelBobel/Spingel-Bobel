@@ -53,6 +53,7 @@ class Question(AsyncBaseCog):
             fp.write(str(self.bot.total_questions))
 
     @commands.Cog.listener()
+    @commands.has_permissions(send_messages=True, attach_files=True, read_messages=True, read_message_history=True)
     async def on_message(self, message: discord.Message):
         if self.bot.user.mentioned_in(message) and (message.content.startswith(f'<@{self.bot.user.id}>') or message.content.startswith(f'<@!{self.bot.user.id}>')):
             question = message.content[len(f'<@{self.bot.user.id}>') if message.content.startswith(f'<@{self.bot.user.id}>') else len(f'<@!{self.bot.user.id}>'):]
@@ -60,9 +61,11 @@ class Question(AsyncBaseCog):
             question = Question.clean_content(message, question)
 
             if len(question) >= 75:
+                self.logger.warn("question was too long")
                 await message.reply('That question is too long for me, please keep it under 75 characters.')
                 return
             if len(question) <= 1:
+                self.logger.warn("asked for a help command")
                 return
 
             async with message.channel.typing():
@@ -70,28 +73,31 @@ class Question(AsyncBaseCog):
 
                 # check if the message was deleted while we were processing, perhaps it was automodded out
                 try:
-                    await asyncio.sleep(0.5)
+                    await asyncio.sleep(0.25)
                     _ = await message.channel.fetch_message(message.id)
                     assert _ is not None
                     await message.reply(file=conch_response_file)
                 except:
                     # The message was deleted, do not send the content
-                    self.logger.info(f'upload canceled due to original message being deleted.')
+                    self.logger.warn(f'upload canceled due to original message being deleted.')
                     return
 
     @app_commands.command(name="conch")
+    @commands.has_permissions(send_messages=True, attach_files=True)
     @app_commands.describe(question='Your question to the Magic Conch. Must be less than 75 characters!')
     async def conch_slash(self, interaction: discord.Interaction, question: str):
         """Ask the Magic Conch your question!"""
         question = '' if not question else question.strip().lstrip().replace("\n", ". ")
 
         if len(question) >= 75:
+            self.logger.warn("question was too long")
             await interaction.response.send_message(
                 'That question is too long for me, please keep it under 75 characters.',
                 ephemeral=True
             )
             return
         if len(question) <= 1 or question == "help":
+            self.logger.warn("asked for a help command")
             await interaction.response.send_message(
                 'To get my help menu, support server, or information, simply ping me!',
                 ephemeral=True
@@ -104,7 +110,7 @@ class Question(AsyncBaseCog):
         await interaction.followup.send(file=conch_response_file)
 
     async def do_conch(self, author: discord.User, guild: discord.Guild, question: str) -> discord.File:
-        self.logger.info(f"{author.id} asked the conch {question}")
+        self.logger.info(f"{guild.id if guild else 'DM'}:{author.id} asked the conch {question}")
         self.update_questions()
 
         # Get the response
@@ -121,7 +127,6 @@ class Question(AsyncBaseCog):
             else:  # Normal
                 resp = random.choice(self.responses)
 
-        self.logger.info(f"constructing image for {author.id}")
         image_name = 'img/conch_small.gif'
         before = 29
         after = 51
@@ -146,7 +151,6 @@ class Question(AsyncBaseCog):
             frame.save(b, format='JPEG')
             frame = Image.open(b)
             frames.append(frame)
-        self.logger.info(f'done image construction for {author.id}, uploading...')
         b = io.BytesIO()
         frames[0].save(b, save_all=True, append_images=frames[1:], format='GIF')
         b.seek(0)
