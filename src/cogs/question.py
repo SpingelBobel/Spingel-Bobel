@@ -5,6 +5,7 @@ import random
 import discord
 
 from discord.ext import commands
+from discord import app_commands
 from PIL import Image, ImageDraw, ImageSequence, ImageFont
 
 from src.utils.async_base_cog import AsyncBaseCog
@@ -52,76 +53,105 @@ class Question(AsyncBaseCog):
             fp.write(str(self.bot.total_questions))
 
     @commands.Cog.listener()
-    async def on_message(self, message):
+    async def on_message(self, message: discord.Message):
         if self.bot.user.mentioned_in(message) and (message.content.startswith(f'<@{self.bot.user.id}>') or message.content.startswith(f'<@!{self.bot.user.id}>')):
             question = message.content[len(f'<@{self.bot.user.id}>') if message.content.startswith(f'<@{self.bot.user.id}>') else len(f'<@!{self.bot.user.id}>'):]
             question = '' if not question else question.strip().lstrip().replace("\n", ". ")
             question = Question.clean_content(message, question)
 
             if len(question) >= 75:
-                await message.channel.send('That question is too long for me, please keep it under 75 characters.')
+                await message.reply('That question is too long for me, please keep it under 75 characters.')
                 return
             if len(question) <= 1:
                 return
 
-            self.logger.info(f"{message.author.id} asked the conch {question}")
-            self.update_questions()
-
             async with message.channel.typing():
-                # Get the response
-                if ' or ' in question:
-                    # This user asked something or something
-                    resp = random.choice(self.paired_responses)
-                else:
-                    # This user asked a regular question
-                    if random.randint(0, 100) < 10:  # Easter egg
-                        if message.guild.id == 384811165949231104:
-                            resp = random.choice(self.easter_eggs + self.bb_easter_eggs)
-                        else:
-                            resp = random.choice(self.easter_eggs)
-                    else:  # Normal
-                        resp = random.choice(self.responses)
-
-                self.logger.info(f"constructing image for {message.author.id}")
-                image_name = 'img/conch_small.gif'
-                before = 29
-                after = 51
-
-                im = Image.open(image_name)
-                cur = 0
-                frames = []
-                frame_font = ImageFont.truetype("fonts/impact.ttf", 15)
-                frame_font_bot = ImageFont.truetype("fonts/impact.ttf", 27)
-
-                for frame in ImageSequence.Iterator(im):
-                    frame = frame.convert('RGB')
-                    cur += 1
-                    frame_draw = ImageDraw.Draw(frame)
-
-                    if cur < before:
-                        Question.draw_text(question, "top", frame, frame_font, frame_draw)
-                    elif cur > after:
-                        Question.draw_text(resp, "bottom", frame, frame_font_bot, frame_draw)
-
-                    b = io.BytesIO()
-                    frame.save(b, format='JPEG')
-                    frame = Image.open(b)
-                    frames.append(frame)
-                self.logger.info(f'done image construction for {message.author.id}, uploading...')
-                b = io.BytesIO()
-                frames[0].save(b, save_all=True, append_images=frames[1:], format='GIF')
-                b.seek(0)
+                conch_response_file = await self.do_conch(message.author, message.guild, question)
 
                 # check if the message was deleted while we were processing, perhaps it was automodded out
                 try:
                     await asyncio.sleep(0.5)
                     _ = await message.channel.fetch_message(message.id)
                     assert _ is not None
-                    await message.channel.send(file=discord.File(b, "conch.gif"))
+                    await message.reply(file=conch_response_file)
                 except:
                     # The message was deleted, do not send the content
                     self.logger.info(f'upload canceled due to original message being deleted.')
                     return
+
+    @app_commands.command(name="conch")
+    @app_commands.describe(question='Your question to the Magic Conch. Must be less than 75 characters!')
+    async def conch_slash(self, interaction: discord.Interaction, question: str):
+        """Ask the Magic Conch your question!"""
+        question = '' if not question else question.strip().lstrip().replace("\n", ". ")
+
+        if len(question) >= 75:
+            await interaction.response.send_message(
+                'That question is too long for me, please keep it under 75 characters.',
+                ephemeral=True
+            )
+            return
+        if len(question) <= 1 or question == "help":
+            await interaction.response.send_message(
+                'To get my help menu, support server, or information, simply ping me!',
+                ephemeral=True
+            )
+            return
+        await interaction.response.defer(ephemeral=False, thinking=False)
+
+        conch_response_file = await self.do_conch(interaction.user, interaction.guild, question)
+
+        await interaction.followup.send(file=conch_response_file)
+
+    async def do_conch(self, author: discord.User, guild: discord.Guild, question: str) -> discord.File:
+        self.logger.info(f"{author.id} asked the conch {question}")
+        self.update_questions()
+
+        # Get the response
+        if ' or ' in question:
+            # This user asked something or something
+            resp = random.choice(self.paired_responses)
+        else:
+            # This user asked a regular question
+            if random.randint(0, 100) < 10:  # Easter egg
+                if guild and guild.id == 384811165949231104:
+                    resp = random.choice(self.easter_eggs + self.bb_easter_eggs)
+                else:
+                    resp = random.choice(self.easter_eggs)
+            else:  # Normal
+                resp = random.choice(self.responses)
+
+        self.logger.info(f"constructing image for {author.id}")
+        image_name = 'img/conch_small.gif'
+        before = 29
+        after = 51
+
+        im = Image.open(image_name)
+        cur = 0
+        frames = []
+        frame_font = ImageFont.truetype("fonts/impact.ttf", 15)
+        frame_font_bot = ImageFont.truetype("fonts/impact.ttf", 27)
+
+        for frame in ImageSequence.Iterator(im):
+            frame = frame.convert('RGB')
+            cur += 1
+            frame_draw = ImageDraw.Draw(frame)
+
+            if cur < before:
+                Question.draw_text(question, "top", frame, frame_font, frame_draw)
+            elif cur > after:
+                Question.draw_text(resp, "bottom", frame, frame_font_bot, frame_draw)
+
+            b = io.BytesIO()
+            frame.save(b, format='JPEG')
+            frame = Image.open(b)
+            frames.append(frame)
+        self.logger.info(f'done image construction for {author.id}, uploading...')
+        b = io.BytesIO()
+        frames[0].save(b, save_all=True, append_images=frames[1:], format='GIF')
+        b.seek(0)
+
+        return discord.File(b, "conch.gif")
 
     @staticmethod
     def draw_text_with_outline(content, x, y, draw, font):

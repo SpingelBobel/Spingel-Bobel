@@ -36,6 +36,7 @@ async def on_ready():
 
         await conch_bot.add_cog(Manager(conch_bot, "magicconch"))
         loaded, total = await conch_bot.get_cog("Manager").load_all_cogs()
+        await conch_bot.tree.sync()
         await conch_bot.get_channel(load_references()['admin_channel']).send(f"Magic Conch is online.\nLoaded {loaded} of {total} cogs.")
 
         STARTED = True
