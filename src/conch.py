@@ -24,11 +24,11 @@ version = "v5.0.0r"
 STARTED = False
 
 
-@conch_bot.event
+@spingel_bot.event
 async def on_ready():
     global STARTED
     logger.info(f"Successfully logged into account {conch_bot.user.name} with id {str(conch_bot.user.id)} and version {version}")
-    await conch_bot.change_presence(activity=discord.Game(name='Playing With Batrick!'))
+    await spingel_bot.change_presence(activity=discord.Game(name='Playing With Batrick!'))
     if not STARTED:
         conch_bot.started = datetime.datetime.now()
         conch_bot.version = version
