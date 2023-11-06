@@ -29,11 +29,11 @@ class Info(AsyncBaseCog):
         total_questions = self.bot.total_questions
 
         embed = discord.Embed(
-                title="The Magic Conch Help, Info, and Statistics",
+                title="Spingel Bobel Help, Info, and Statistics",
                 description=
                 f"**Commands and Usage**\n"
                 f"<@{self.bot.user.id}> help, info, stat, stats, or invite: *this menu*\n"
-                f"<@{self.bot.user.id}> [question]? : *asks the bot a question and requests a .GIF response*\n"
+                f"<@{self.bot.user.id}> [question]? : *asks the bot a question and requests a .png response*\n"
                 f"\nThe following are my current session metrics and statistics!\n",
                 color=self.bot.user.color
         ).set_thumbnail(
