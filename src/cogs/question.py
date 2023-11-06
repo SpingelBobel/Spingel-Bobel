@@ -86,7 +86,7 @@ class Question(AsyncBaseCog):
     @commands.has_permissions(send_messages=True, attach_files=True)
     @app_commands.describe(question='Your question to the Magic Conch. Must be less than 75 characters!')
     async def conch_slash(self, interaction: discord.Interaction, question: str):
-        """Ask the Magic Conch your question!"""
+        """Ask Spingel Bobel Your Question!"""
         question = '' if not question else question.strip().lstrip().replace("\n", ". ")
 
         if len(question) >= 75:
