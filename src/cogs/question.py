@@ -16,15 +16,15 @@ class Question(AsyncBaseCog):
         super().__init__(bot)
 
         self.responses = [
+            'Why',
+            'i Don/'t Think So',
             'Yes',
-            'Yes',
-            'Yes',
-            'Certainly',
-            'No',
-            'No',
-            'No',
+            'Probaly Not',
+            'Take A Hike',
+            'Kys',
+            'Shut It',
             'Absolutely not',
-            'Maybe some day',
+            'Mabye Not',
             'Maybe some day',
         ]
         self.paired_responses = [
@@ -40,7 +40,7 @@ class Question(AsyncBaseCog):
             'I can\'t be bothered',
         ]
         self.bb_easter_eggs = [
-            'If doveman says so',
+            'I Think Doveman Might Be Conciderable',
             'Go ask dove, I have no clue',
         ]
 
@@ -62,7 +62,7 @@ class Question(AsyncBaseCog):
 
             if len(question) >= 75:
                 self.logger.warn("question was too long")
-                await message.reply('That question is too long for me, please keep it under 75 characters.')
+                await message.reply('Fuck You, I Refuse To Answer, please keep it under 75 characters.')
                 return
             if len(question) <= 1:
                 self.logger.warn("asked for a help command")
@@ -126,7 +126,7 @@ class Question(AsyncBaseCog):
             else:  # Normal
                 resp = random.choice(self.responses)
 
-        image_name = 'img/conch_small.gif'
+        image_name = 'img/Untitled13_20230104184836.png
         before = 29
         after = 51
 
@@ -156,7 +156,7 @@ class Question(AsyncBaseCog):
 
         self.logger.info(f"{guild.id if guild else 'DM'} : {author.id} : {question} : {resp}")
 
-        return discord.File(b, "conch.gif")
+        return discord.File(b, "SpingelBob.png")
 
     @staticmethod
     def draw_text_with_outline(content, x, y, draw, font):
