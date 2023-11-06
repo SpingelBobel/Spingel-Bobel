@@ -14,7 +14,7 @@ async def prefix(_bot, message):
 
 
 logger = logging.getLogger(__name__)
-logger.info("Starting \'Magic Conch\' bot script!")
+logger.info("Starting \'Spingel Bobel\' bot script!")
 conch_bot = commands.AutoShardedBot(
     command_prefix=prefix,
     intents=discord.Intents.default()
@@ -28,16 +28,16 @@ STARTED = False
 async def on_ready():
     global STARTED
     logger.info(f"Successfully logged into account {conch_bot.user.name} with id {str(conch_bot.user.id)} and version {version}")
-    await conch_bot.change_presence(activity=discord.Game(name='the game of life!'))
+    await conch_bot.change_presence(activity=discord.Game(name='Playing With Batrick!'))
     if not STARTED:
         conch_bot.started = datetime.datetime.now()
         conch_bot.version = version
         conch_bot.total_questions = 0
 
-        await conch_bot.add_cog(Manager(conch_bot, "magicconch"))
+        await conch_bot.add_cog(Manager(conch_bot, "SpingelBobel"))
         loaded, total = await conch_bot.get_cog("Manager").load_all_cogs()
         await conch_bot.tree.sync()
-        await conch_bot.get_channel(load_references()['admin_channel']).send(f"Magic Conch is online.\nLoaded {loaded} of {total} cogs.")
+        await conch_bot.get_channel(load_references()['admin_channel']).send(f"Spingel Bobel is online.\nLoaded {loaded} of {total} cogs.")
 
         STARTED = True
 
