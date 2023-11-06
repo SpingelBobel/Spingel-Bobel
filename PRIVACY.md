@@ -2,13 +2,13 @@
 This Discord Bot collects and logs messages only that activate a response. Messages that activate logging are those that begin with the bot's mention.
 
 For example, the following messages will be logged:
- * @Magic Conch#7782
- * @Magic Conch#7782 Is this a question?
- * @Magic Conch#7782 help
+ * @Spingel Bobel#6666 
+ * @Spingel Bobel#6666 help
+ * @Spingel Bobel#6666 IS This A Question?
 
 The following messages will **not** be logged:
- * I think @Magic Conch#7782 is a great bot
- * Magic Conch#7782 is a public bot!
+ * I think @Spingel Bobel#6666 is a great bot
+ * Spingel Bobel#6666 is a public bot!
  * This is a random message
 
 For each logged message, the following information is collected and logged:
