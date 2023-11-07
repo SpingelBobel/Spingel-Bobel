@@ -2,7 +2,7 @@ import json
 
 
 class EcosystemBots:
-    SpingelBobel = "BOBEL_"
+    SpingelBobel = "SPINGEL_"
 
 
 def load_creds(is_debug, bot: str):
