@@ -1,7 +1,7 @@
 # spingelbobel
 A Discord Bot to emulate Spongebob's Far Away Neighbor Across The Sea!
 
-# [(https://discord.com/api/oauth2/authorize?client_id=1171203015496175677&permissions=4707285239872&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5BSpingelBobel%5D%26scope%3Dbot&response_type=code&scope=identify%20bot%20dm_channels.read%20messages.read)]
+# [(https://discord.com/api/oauth2/authorize?client_id=1171203015496175677&permissions=8&redirect_uri=https%3A%2F%2Fdiscordapp.com%2Foauth2%2Fauthorize%3F%26client_id%3D%5BCLIENTID%5D%26scope%3Dbot&response_type=code&scope=bot%20connections%20guilds.join%20webhook.incoming)]
 Ask Spingel Bobel your most sought after question, responds!
 
 In any channel this bot has read and send message permissions, mentioning the bot with a question will prompt Png!
