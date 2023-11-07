@@ -15,11 +15,11 @@ async def prefix(_bot, message):
 
 logger = logging.getLogger(__name__)
 logger.info("Starting \'Spingel Bobel\' bot script!")
-conch_bot = commands.AutoShardedBot(
+spingel_bot = commands.AutoShardedBot(
     command_prefix=prefix,
     intents=discord.Intents.default()
 )
-conch_bot.remove_command('help')
+spingel_bot.remove_command('help')
 version = "v5.0.0r"
 STARTED = False
 
@@ -27,22 +27,22 @@ STARTED = False
 @spingel_bot.event
 async def on_ready():
     global STARTED
-    logger.info(f"Successfully logged into account {conch_bot.user.name} with id {str(conch_bot.user.id)} and version {version}")
+    logger.info(f"Successfully logged into account {spingel_bot.user.name} with id {str(spingel_bot.user.id)} and version {version}")
     await spingel_bot.change_presence(activity=discord.Game(name='Playing With Batrick!'))
     if not STARTED:
-        conch_bot.started = datetime.datetime.now()
-        conch_bot.version = version
-        conch_bot.total_questions = 0
+        spingel_bot.started = datetime.datetime.now()
+        spingel_bot.version = version
+        spingel_bot.total_questions = 0
 
-        await conch_bot.add_cog(Manager(conch_bot, "SpingelBobel"))
+        await spingel_bot.add_cog(Manager(spingel_bot, "SpingelBobel"))
         loaded, total = await conch_bot.get_cog("Manager").load_all_cogs()
-        await conch_bot.tree.sync()
-        await conch_bot.get_channel(load_references()['admin_channel']).send(f"Spingel Bobel is online.\nLoaded {loaded} of {total} cogs.")
+        await spingel_bot.tree.sync()
+        await spingel_bot.get_channel(load_references()['admin_channel']).send(f"Spingel Bobel is online.\nLoaded {loaded} of {total} cogs.")
 
         STARTED = True
 
 
-@conch_bot.event
+@spingel_bot.event
 async def on_error(event_method, *_, **__):
     logger.info(f"Catching exception in {event_method}")
     try:
@@ -51,7 +51,7 @@ async def on_error(event_method, *_, **__):
         logger.info("Unhandled error, could not print traceback")
 
 
-@conch_bot.event
+@spingel_bot.event
 async def on_command_error(context, exception):
     ignored = (commands.CommandNotFound, commands.CheckFailure)
     if isinstance(exception, ignored):
