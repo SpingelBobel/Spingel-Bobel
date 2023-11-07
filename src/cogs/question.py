@@ -82,10 +82,10 @@ class Question(AsyncBaseCog):
                     self.logger.warn(f'upload canceled due to original message being deleted.')
                     return
 
-    @app_commands.command(name="conch")
+    @app_commands.command(name="spingel")
     @commands.has_permissions(send_messages=True, attach_files=True)
     @app_commands.describe(question='Your question to the Magic Conch. Must be less than 75 characters!')
-    async def conch_slash(self, interaction: discord.Interaction, question: str):
+    async def spingel_slash(self, interaction: discord.Interaction, question: str):
         """Ask Spingel Bobel Your Question!"""
         question = '' if not question else question.strip().lstrip().replace("\n", ". ")
 
@@ -133,8 +133,8 @@ class Question(AsyncBaseCog):
         im = Image.open(image_name)
         cur = 0
         frames = []
-        frame_font = ImageFont.truetype("fonts/impact.ttf", 15)
-        frame_font_bot = ImageFont.truetype("fonts/impact.ttf", 27)
+        frame_font = ImageFont.truetype("fonts/SpongeboyRegular-gx2n6.otf" 15)
+        frame_font_bot = ImageFont.truetype("fonts/SpongeboyRegular-gx2n6.otf", 27)
 
         for frame in ImageSequence.Iterator(im):
             frame = frame.convert('RGB')
