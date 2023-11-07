@@ -34,7 +34,7 @@ async def on_ready():
         spingel_bot.version = version
         spingel_bot.total_questions = 0
 
-        await spingel_bot.add_cog(Manager(spingel_bot, "SpingelBobel"))
+        await spingel_bot.add_cog(Manager(spingel_bot, "MagicConch"))
         loaded, total = await Spingel_bot.get_cog("Manager").load_all_cogs()
         await spingel_bot.tree.sync()
         await spingel_bot.get_channel(load_references()['admin_channel']).send(f"Spingel Bobel is online.\nLoaded {loaded} of {total} cogs.")
