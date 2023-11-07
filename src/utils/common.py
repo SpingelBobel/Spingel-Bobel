@@ -2,7 +2,7 @@ import json
 
 
 class EcosystemBots:
-    MagicConch = "CONCH_"
+    SpingelBobel = "BOBEL_"
 
 
 def load_creds(is_debug, bot: str):
